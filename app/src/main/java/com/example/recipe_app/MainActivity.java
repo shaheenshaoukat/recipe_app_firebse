@@ -1,5 +1,6 @@
 package com.example.recipe_app;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +8,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,8 +23,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     MyAdapter myAdapter;
     EditText txt_Search;
+    String filname;
+    String pin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +130,55 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void btn_uploadActivity(View view) {
+        condition();
+/*
         startActivity(new Intent(this,Upload_Recipe.class));
+*/
+    }
+
+
+    public void condition(){
+
+        Dialog dialog = new Dialog(MainActivity.this);
+        dialog.setContentView(R.layout.dialog);
+        EditText ed_name = dialog.findViewById(R.id.name);
+        Button btn_send = dialog.findViewById(R.id.btn_send);
+
+        dialog.show();
+
+        btn_send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                SimpleDateFormat format=new SimpleDateFormat("hhmm", Locale.CANADA);
+                Date now=new Date();
+                pin=ed_name.getText().toString();
+
+                filname=format.format(now);
+
+                ed_name.setText("");
+
+
+                if (pin.equals(filname)){
+                    startActivity(new Intent(MainActivity.this,Upload_Recipe.class));
+
+
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "please enter correct pin", Toast.LENGTH_SHORT).show();
+                }
+
+
+
+
+
+
+            }
+        });
+
+
+
+
+
     }
 }
